@@ -1,15 +1,49 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import electronics from "/images/electronics.png"
+import fashion from "/images/fashion.png"
+import furniture from "/images/furniture.png"
+import groceries from "/images/groceries.png"
 import Button from './Button'
 import StatLabel from './StatLabel'
 import Category from './Category'
 
+const heroSlides = [
+    {
+        title: "Electronics",
+        image: electronics,
+    },
+    {
+        title: "Fashion",
+        image: fashion,
+    },
+    {
+        title: "Furnitures",
+        image: furniture,
+    },
+    {
+        title: "Groceries",
+        image: groceries,
+    },
+]
+
+
+
 const HeroSection = () => {
+
+    const [current, setCurrent] = useState(0);
+    useEffect(() => {
+        const interval = setInterval(()=> {
+            setCurrent((prev) => (prev + 1) % heroSlides.length);
+        }, 5000);
+
+        return () => clearInterval(interval);
+    }, [])
+
     return (
         <div className='bg-secondary w-full'>
             <div className='flex pt-10 pb-3 px-5 md:px-10 xl:px-15 text-primary flex-col space-y-5 md:space-y-0 md:flex-row'>
                 <div className='w-full md:w-1/2 flex flex-col space-y-5 items-center md:items-start'>
-                    <div className='pt-5 text-4xl sm:text-5xl font-extrabold leading-10 sm:leading-12 text-center md:text-left'>EVERYTHING <br /> YOU NEED, ALL <br />IN ONE PLACE</div>
+                    <div className='pt-5 text-4xl sm:text-5xl font-archivo font-extrabold leading-10 sm:leading-12 text-center md:text-left'>EVERYTHING <br /> YOU NEED, ALL <br />IN ONE PLACE</div>
                     <p className="text-[16px] font-light xl:w-[90%] text-center md:text-left">Discover quality products acrross electronics, fashion,
                         groceries, home essentials, beauty, and much more.
                     </p>
@@ -29,12 +63,12 @@ const HeroSection = () => {
                     </div>
                 </div>
                 <div className='flex flex-col space-y-5 items-center w-full md:w-1/2'>
-                    <div className='w-full h-full rounded-full'>
-                        <img className='drop-shadow-2xl drop-shadow-gray-300' src={electronics} />
+                    <div className='w-full h-94 rounded-full flex justify-center items-center'>
+                        <img className='drop-shadow-2xl drop-shadow-gray-300 object-contain transition-all duration-500 h-94 w-auto' src={heroSlides[current].image} />
                     </div>
 
                     <div>
-                        <div className='px-7 font-semibold text-center w-fit rounded-full border-2 py-2 border-primary'>Fashion</div>
+                        <div className='px-7 font-semibold text-center w-fit rounded-full border-2 py-2 border-primary'>{heroSlides[current].title}</div>
                     </div>
                 </div>
 

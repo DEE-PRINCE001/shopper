@@ -18,7 +18,7 @@ const Footer = () => {
             </div>
 
             <div className='flex flex-col space-y-4'>
-                <h4 className='text-primary font-normal text-[16px] tracking-[4px]'>COMPANY</h4>
+                <h4 className='text-primary font-normal text-[14px] tracking-[4px]'>COMPANY</h4>
                 <div className='flex flex-col space-y-2 font-light text-gray-500 text-[14px]'>
                     <Link className='hover:text-primary'>About</Link>
                     <Link className='hover:text-primary'>Features</Link>
@@ -28,7 +28,7 @@ const Footer = () => {
 
             </div>
             <div className='flex flex-col space-y-4'>
-                <h4 className='text-primary font-normal text-[16px] tracking-[4px]'>HELP</h4>
+                <h4 className='text-primary font-normal text-[14px] tracking-[4px]'>HELP</h4>
                 <div className='flex flex-col space-y-2 font-light text-gray-500 text-[14px]'>
                     <Link className='hover:text-primary'>Customer Support</Link>
                     <Link className='hover:text-primary'>Delivery Details</Link>
@@ -38,7 +38,7 @@ const Footer = () => {
 
             </div>
             <div className='flex flex-col space-y-4'>
-                <h4 className='text-primary font-normal text-[16px] tracking-[4px]'>FAQ</h4>
+                <h4 className='text-primary font-normal text-[14px] tracking-[4px]'>FAQ</h4>
                 <div className='flex flex-col space-y-2 font-light text-gray-500 text-[14px]'>
                     <Link className='hover:text-primary'>Account</Link>
                     <Link className='hover:text-primary'>Manage Deliveries</Link>
@@ -48,7 +48,7 @@ const Footer = () => {
 
             </div>
             <div className='flex flex-col space-y-4'>
-                <h4 className='text-primary font-normal text-[16px] tracking-[4px]'>RESOURCES</h4>
+                <h4 className='text-primary font-normal text-[14px] tracking-[4px]'>RESOURCES</h4>
                 <div className='flex flex-col space-y-2 font-light text-gray-500 text-[14px]'>
                     <Link className='hover:text-primary'>Free eBooks</Link>
                     <Link className='hover:text-primary'>Development Tutorial</Link>
@@ -60,7 +60,7 @@ const Footer = () => {
         </div>
 
         <div className='text-gray-500 text-sm font-sans text-center'>
-            Shopper (C) 2026 @ Deeprince. All Rights Reserved 
+            Shopper (C) 2026 @Honour. All Rights Reserved 
         </div>
     </div>
   )
