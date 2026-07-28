@@ -13,10 +13,9 @@ import furnitures from '/images/furniture.png';
 import OrderSummary from '../../components/OrderSummary'
 import CartSection from '../../components/CartSection'
 
-const Dashboard = () => {
+const CDashboard = () => {
     return (
         <div>
-            <Dashboard />
             <Navbar />
             <HeroSection />
             <CartSection />
@@ -29,4 +28,4 @@ const Dashboard = () => {
     )
 }
 
-export default Dashboard
+export default CDashboard

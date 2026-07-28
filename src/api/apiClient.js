@@ -2,13 +2,13 @@ import axios from 'axios';
 
 const apiClient = axios.create({
  
-  baseURL: process.env.SHOPPER_API_URL || 'https://localhost:5142', 
+  baseURL: 'https://localhost:5142', 
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Request Interceptor: Attach the JWT token if it exists
+
 apiClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('accessToken');
@@ -22,7 +22,7 @@ apiClient.interceptors.request.use(
   }
 );
 
-// Response Interceptor: Handle global errors (like 401 Unauthorized)
+
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {

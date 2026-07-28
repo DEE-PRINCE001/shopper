@@ -12,6 +12,7 @@ const Input = ({
     textarea = false,
     rows = 4,
     leftIcon: LeftIcon,
+    required = true,
 }) => {
     const [showPassword, setShowPassword] = useState(false);
 
@@ -37,6 +38,7 @@ const Input = ({
                     value={value}
                     placeholder={placeholder}
                     onChange={onChange}
+                    required={required}
                     className={`w-full rounded-lg border border-secondary bg-white px-4 py-3 outline-none transition resize-none focus:border-primary ${className}`}
                 />
             ) : (
@@ -54,6 +56,7 @@ const Input = ({
                         value={value}
                         placeholder={placeholder}
                         onChange={onChange}
+                        required={required}
                         className={`w-full rounded-lg border border-secondary bg-white py-3 outline-none transition focus:border-primary ${
                             LeftIcon ? "pl-11" : "px-4"
                         } ${

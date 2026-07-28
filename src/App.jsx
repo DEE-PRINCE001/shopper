@@ -12,13 +12,14 @@ import Register from './pages/auth/Register'
 import ForgotPassword from './pages/auth/ForgotPassword'
 import ResetPassword from './pages/auth/ResetPassword'
 import ResetLinkSent from './pages/auth/ResetLinkSent'
-import DashBoard from './pages/customers/Dashboard'
+import CDashboard from './pages/customers/CDashboard'
 
 
 const App = () => {
   return (
     <div className='font-inter'>
       <Routes>
+        
 
         {/* AuthPages */}
         <Route path='/auth' element={<AuthLayout />}>
@@ -65,20 +66,8 @@ const App = () => {
           />
         </Route>
 
-        <Route index element={<DashBoard/>} />
+        <Route path="/" element={<CDashboard/>} />
       </Routes>
-      {/* <Dashboard/> */}
-      {/* <Navbar />
-        <HeroSection />
-        <CartSection />
-        <ProductSection name='new arrivals' border />
-        <ProductSection name='top selling' />
-        <TestimonialsSection />
-        <ContactSection />
-        <Footer /> */}
-      {/* <Product img={"/images/fashion.png"} discount={20}/> */}
-
-
     </div>
   )
 }

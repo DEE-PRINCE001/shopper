@@ -4,8 +4,35 @@ import { Lock, Mail } from "lucide-react";
 import Button from "../../components/ui/Button";
 import Input from "../../components/ui/Input";
 import AuthHeader from "../../components/auth/AuthHeader";
+import {authApi} from '../../api';
+import {useState} from 'react'
 
 const Login = () => {
+
+    const [formData, setFormData] = useState({email: "", password: ""});
+    const [error, setError] = useState("")
+
+
+    const handleChange = (e) => {
+        setError("");
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setError('')
+        try {
+
+            console.log(formData)
+            authApi.login(formData)
+        }
+        catch (err) {
+            setError(err);
+            console.log(error);
+            alert(error)
+        }
+    }
+
     return (
         <>
             <AuthHeader
@@ -13,15 +40,21 @@ const Login = () => {
                 subtitle="Welcome back! Please enter your details."
             />
 
-            <form className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-5">
                 <Input
                     label="Email Address"
+                    name={"email"}
+                    value={formData.email}
+                    onChange={handleChange}
                     placeholder="Enter your email"
                     leftIcon={Mail}
                 />
 
                 <Input
                     label="Password"
+                    name={"password"}
+                    value={formData.password}
+                    onChange={handleChange}
                     type="password"
                     placeholder="Enter your password"
                     leftIcon={Lock}
@@ -38,14 +71,14 @@ const Login = () => {
                     </label>
 
                     <Link
-                        to="/forgot-password"
+                        to="/auth/forgot-password"
                         className="text-sm font-medium text-primary"
                     >
                         Forgot Password?
                     </Link>
                 </div>
 
-                <Button className="w-full">
+                <Button type="submit" className="w-full">
                     Sign In
                 </Button>
             </form>
@@ -53,7 +86,7 @@ const Login = () => {
             <p className="mt-8 text-center text-sm text-gray-500">
                 Don't have an account?{" "}
                 <Link
-                    to="/register"
+                    to="/auth/register"
                     className="font-semibold text-primary"
                 >
                     Create Account

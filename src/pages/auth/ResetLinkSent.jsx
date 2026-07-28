@@ -19,7 +19,7 @@ const ResetLinkSent = () => {
                 your email address.
             </p>
 
-            <Link to="/login">
+            <Link to="/auth/login">
                 <Button className="mt-8 w-full">
                     Back to Login
                 </Button>
