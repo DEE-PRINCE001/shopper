@@ -1,7 +1,10 @@
 import React from 'react'
 import Ratings from './Ratings'
 import { CalculateDiscount } from '../utils/DicountCalculator'
-
+import Button from './Button'
+import { FaCartPlus } from 'react-icons/fa'
+       
+              
 const Product = ({ img, name = "Skinny Fit Jeans", rating = 0, price=260, discount}) => {
     return (
         <div className='flex flex-col space-y-5'>
@@ -20,6 +23,7 @@ const Product = ({ img, name = "Skinny Fit Jeans", rating = 0, price=260, discou
                     </div>}
                 </div>
             </div>
+            <Button size={"w-full py-2 text-center"} leftIcon={<FaCartPlus className='text-white' size={20} />} colors={"bg-primary border-primary text-white hover:bg-primary/80"}>Add to Cart</Button>
         </div>
     )
 }

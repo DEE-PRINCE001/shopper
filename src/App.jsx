@@ -13,13 +13,17 @@ import ForgotPassword from './pages/auth/ForgotPassword'
 import ResetPassword from './pages/auth/ResetPassword'
 import ResetLinkSent from './pages/auth/ResetLinkSent'
 import CDashboard from './pages/customers/CDashboard'
+import CustomerLayout from './layouts/CustomerLayout'
+import CartPage from './pages/customers/CartPage'
+import Feed from './pages/customers/Feed'
+import NewArrivals from './pages/customers/NewArrivals'
 
 
 const App = () => {
   return (
     <div className='font-inter'>
       <Routes>
-        
+
 
         {/* AuthPages */}
         <Route path='/auth' element={<AuthLayout />}>
@@ -66,7 +70,13 @@ const App = () => {
           />
         </Route>
 
-        <Route path="/" element={<CDashboard/>} />
+        <Route path="/" element={<CustomerLayout />}>
+          <Route index element={<CDashboard />} />
+          <Route path='cart' element={<CartPage />} />
+          <Route path='feeds' element={<Feed />} />
+          <Route path='new-arrivals' element={<NewArrivals />} />
+          <Route path='contact' />
+        </Route>
       </Routes>
     </div>
   )

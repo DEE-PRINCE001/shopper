@@ -2,13 +2,13 @@ import React from 'react'
 import ProductSection from '../../components/ProductSection'
 import TestimonialsSection from '../../components/TestimonialsSection'
 
-const Feed = () => {
+const NewArrivals = () => {
   return (
     <div>
-        <ProductSection name='Feeds'/>
+        <ProductSection name='NewArrivals'/>
         <TestimonialsSection />
     </div>
   )
 }
 
-export default Feed
+export default NewArrivals;

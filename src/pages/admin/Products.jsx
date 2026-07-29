@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import PageHeader from "../../components/admin/PageHeader";
 import ProductModal from "../../components/admin/ProductModal";
@@ -7,60 +7,106 @@ import ProductRow from "../../components/admin/ProductRow";
 import DataTable from "../../components/ui/DataTable";
 import Pagination from "../../components/ui/Pagination";
 import Select from "../../components/ui/Select";
+import { adminCatalogApi, catalogApi } from "../../api";
+import LoadingState from "../../components/ui/LoadingState";
 
-const products = [
-    {
-        id: 1,
-        image: "https://placehold.co/60",
-        name: "Nike Air Max",
-        category: "Shoes",
-        price: 120,
-        stock: 18,
-        status: "Active",
-    },
-    {
-        id: 2,
-        image: "https://placehold.co/60",
-        name: "Denim Jacket",
-        category: "Men",
-        price: 95,
-        stock: 10,
-        status: "Active",
-    },
-    {
-        id: 3,
-        image: "https://placehold.co/60",
-        name: "Women's Hoodie",
-        category: "Women",
-        price: 65,
-        stock: 0,
-        status: "Inactive",
-    },
-];
+
+// const products = [
+//     {
+//         id: 1,
+//         image: "https://placehold.co/60",
+//         name: "Nike Air Max",
+//         category: "Shoes",
+//         price: 120,
+//         stock: 18,
+//         status: "Active",
+//     },
+//     {
+//         id: 2,
+//         image: "https://placehold.co/60",
+//         name: "Denim Jacket",
+//         category: "Men",
+//         price: 95,
+//         stock: 10,
+//         status: "Active",
+//     },
+//     {
+//         id: 3,
+//         image: "https://placehold.co/60",
+//         name: "Women's Hoodie",
+//         category: "Women",
+//         price: 65,
+//         stock: 0,
+//         status: "Inactive",
+//     },
+// ];
 
 const Products = () => {
     const [search, setSearch] = useState("");
     const [category, setCategory] = useState("");
     const [status, setStatus] = useState("");
-
+    const [loading, setLoading] = useState(false);
+    const [options, setOptions] = useState([])
     const [page, setPage] = useState(1);
+    const [products, setProducts] = useState([]);
+    const [response, setResponse] = useState([])
 
     const [openModal, setOpenModal] = useState(false);
 
+
+
+
+    useEffect(() => {
+        const fetchProductsAndCategories = async () => {
+            try {
+                setLoading(true)
+
+                const response = await catalogApi.getProducts();
+                const categories = await catalogApi.getCategories()
+                // console.log(response)
+                setProducts(response.items)
+
+                const mappedOptions = categories.map((x) => {
+                    return {
+                        "label": x.name,
+                        "value": x.id
+                    }
+                })
+
+            
+
+                setOptions(mappedOptions)
+
+
+            }
+            catch (err) {
+                console.log(err)
+            }
+            finally {
+                setLoading(false)
+            }
+        }
+
+        fetchProductsAndCategories()
+    }, [])
+
+
+
+
     const filteredProducts = useMemo(() => {
+        // console.log("prod", products)
         return products.filter((product) => {
             const matchesSearch =
                 product.name
                     .toLowerCase()
                     .includes(search.toLowerCase());
 
-            const matchesCategory =
-                !category ||
-                product.category === category;
+            const matchesCategory = !category ||
+                product.categoryId === (category) ;
 
             const matchesStatus =
                 !status ||
-                product.status === status;
+                "Active" === status;
 
             return (
                 matchesSearch &&
@@ -68,7 +114,14 @@ const Products = () => {
                 matchesStatus
             );
         });
-    }, [search, category, status]);
+    }, [products, search, category, status]);
+
+
+    if (loading) {
+        return (
+            <LoadingState />
+        )
+    }
 
     return (
         <div className="space-y-6">
@@ -88,24 +141,7 @@ const Products = () => {
                     onChange={(e) =>
                         setCategory(e.target.value)
                     }
-                    options={[
-                        {
-                            value: "",
-                            label: "All Categories",
-                        },
-                        {
-                            value: "Shoes",
-                            label: "Shoes",
-                        },
-                        {
-                            value: "Men",
-                            label: "Men",
-                        },
-                        {
-                            value: "Women",
-                            label: "Women",
-                        },
-                    ]}
+                    options={[{"label":"All Categories", "value":""}, ...options]}
                     className="w-52"
                 />
 
@@ -150,7 +186,7 @@ const Products = () => {
                         onEdit={() =>
                             setOpenModal(true)
                         }
-                        onDelete={() => {}}
+                        onDelete={() => { }}
                     />
                 ))}
             </DataTable>
@@ -169,6 +205,7 @@ const Products = () => {
             />
 
             <ProductModal
+                options={options}
                 open={openModal}
                 onClose={() =>
                     setOpenModal(false)

@@ -12,18 +12,16 @@ import Cart from '../../components/Cart'
 import furnitures from '/images/furniture.png';
 import OrderSummary from '../../components/OrderSummary'
 import CartSection from '../../components/CartSection'
+import CustomerLayout from '../../layouts/CustomerLayout'
+
 
 const CDashboard = () => {
     return (
         <div>
-            <Navbar />
             <HeroSection />
-            <CartSection />
             <ProductSection name='new arrivals' border />
             <ProductSection name='top selling' />
             <TestimonialsSection />
-            <ContactSection />
-            <Footer />
         </div>
     )
 }

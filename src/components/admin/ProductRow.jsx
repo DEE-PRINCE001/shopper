@@ -10,7 +10,7 @@ const ProductRow = ({
         <tr className="border-b border-secondary last:border-none">
             <td className="px-6 py-4">
                 <img
-                    src={product.image}
+                    src={"https://placehold.co/60"}
                     alt={product.name}
                     className="h-14 w-14 rounded-lg object-cover"
                 />
@@ -21,7 +21,7 @@ const ProductRow = ({
             </td>
 
             <td className="px-6 py-4">
-                {product.category}
+                {product.categoryName}
             </td>
 
             <td className="px-6 py-4">
@@ -29,12 +29,12 @@ const ProductRow = ({
             </td>
 
             <td className="px-6 py-4">
-                {product.stock}
+                {product.stockQuantity}
             </td>
 
             <td className="px-6 py-4">
                 <StatusBadge
-                    status={product.status}
+                    status={"Active"}
                 />
             </td>
 
