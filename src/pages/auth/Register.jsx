@@ -1,16 +1,19 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { User, Mail, Lock } from "lucide-react";
 
 import Button from "../../components/ui/Button";
 import Input from "../../components/ui/Input";
 import AuthHeader from "../../components/auth/AuthHeader";
 import { useState } from 'react'
+
 import {authApi} from '../../api'
 
 const Register = () => {
-   const [formData, setFormData] = useState({firstName:"", lastName:"", email:"", password:""});
+   const [formData, setFormData] = useState({"firstName":"", "lastName":"", "email":"", "password":""});
    const [passwordConfirm, setPasswordConfirm] = useState("");
+   const [loading, setLoading] = useState(false);
     const [error, setError] = useState("")
+    const navigate = useNavigate();
 
 
     const handleChange = (e) => {
@@ -18,23 +21,30 @@ const Register = () => {
         setFormData({...formData, [e.target.name]:e.target.value});
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         setError('')
         if (passwordConfirm != formData.password){
             setError("The entered password are different")
-            alert(error)
+            alert("The entered password are different")
+            setLoading(false)
             return;
         }
         try {
             
-            console.log(formData)
-            authApi.register(formData)
+            // console.log(formData)
+            const response = await authApi.register(formData)
+            alert("Registration succesful, You are now being redirected to login page")
+            navigate("/auth/login")
         }
         catch(err){
             setError(err);
             console.log(error);
             alert(error)
+        }
+        finally {
+            setLoading(false)
         }
     }
 
@@ -109,8 +119,8 @@ const Register = () => {
                     </span>
                 </label>
 
-                <Button type="submit" className="w-full">
-                    Create Account
+                <Button type="submit" disabled={loading} className="w-full">
+                    {loading? "Processing..." : "Create Account"}
                 </Button>
             </form>
 

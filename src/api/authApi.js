@@ -3,6 +3,7 @@ import apiClient from './apiClient';
 export const authApi = {
   register: async (data) => {
     // schema: RegisterUserCommand { firstName, lastName, email, password }
+    console.log(data);
     const response = await apiClient.post('/api/Auth/register', data);
     return response.data;
   },

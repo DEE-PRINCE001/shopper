@@ -5,7 +5,7 @@ import {
     ShoppingBag,
     LogOut,
 } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const links = [
     {
@@ -30,7 +30,16 @@ const links = [
     },
 ];
 
+
 const Sidebar = () => {
+    
+    const navigate = useNavigate();
+    const handleLogout = () => {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        navigate("/auth/login")
+    }
+
     return (
         <aside className="flex h-screen w-64 flex-col border-r border-secondary bg-white">
             {/* Logo */}
@@ -75,7 +84,7 @@ const Sidebar = () => {
             {/* Logout */}
 
             <div className="border-t border-secondary p-4">
-                <button className="flex w-full items-center gap-3 rounded-lg px-4 py-3 transition hover:bg-secondary">
+                <button onClick={handleLogout} className="flex w-full items-center gap-3 rounded-lg px-4 py-3 transition hover:bg-secondary">
                     <LogOut size={20} />
 
                     Logout

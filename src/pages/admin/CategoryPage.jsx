@@ -10,14 +10,14 @@ const dummyCategories = [
         id: 1,
         image: "https://placehold.co/60",
         name: "Men",
-        description: "Men's fashion",
+        slug: "Men's fashion",
         products: 24,
     },
     {
         id: 2,
         image: "https://placehold.co/60",
         name: "Women",
-        description: "Women's fashion",
+        slugh: "Women's fashion",
         products: 31,
     },
 ];

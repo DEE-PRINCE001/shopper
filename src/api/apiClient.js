@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const apiClient = axios.create({
  
-  baseURL: 'https://localhost:5142', 
+  baseURL: 'https://shopper-k30n.onrender.com', 
   headers: {
     'Content-Type': 'application/json',
   },

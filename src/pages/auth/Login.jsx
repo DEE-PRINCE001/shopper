@@ -1,5 +1,6 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Lock, Mail } from "lucide-react";
+import {jwtDecode} from "jwt-decode"
 
 import Button from "../../components/ui/Button";
 import Input from "../../components/ui/Input";
@@ -9,8 +10,10 @@ import {useState} from 'react'
 
 const Login = () => {
 
-    const [formData, setFormData] = useState({email: "", password: ""});
+    const [formData, setFormData] = useState({"email": "", "password": ""});
     const [error, setError] = useState("")
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
 
     const handleChange = (e) => {
@@ -18,18 +21,36 @@ const Login = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true)
         setError('')
         try {
 
-            console.log(formData)
-            authApi.login(formData)
+            // console.log(formData)
+
+            const response = await authApi.login(formData)
+            console.log(response)
+            
+            localStorage.setItem("accessToken", response.accessToken )
+            localStorage.setItem("refreshToken", response.refreshToken )
+            const decoded = jwtDecode(response.accessToken);
+            if (decoded.role === "Admin"){
+                navigate("/admin")
+            }
+            else {
+                navigate("/")
+            }
+            alert("Login successful, you're now being directed to your dashboard")
+
         }
         catch (err) {
             setError(err);
             console.log(error);
             alert(error)
+        }
+        finally {
+            setLoading(false)
         }
     }
 
@@ -78,8 +99,8 @@ const Login = () => {
                     </Link>
                 </div>
 
-                <Button type="submit" className="w-full">
-                    Sign In
+                <Button type="submit" disabled={loading} className="w-full">
+                    {loading? "Processing..." : "Sign In"}
                 </Button>
             </form>
 
