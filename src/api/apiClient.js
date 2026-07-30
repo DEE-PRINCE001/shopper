@@ -27,7 +27,7 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
-      // Handle token expiration (e.g., trigger refresh-token or logout)
+      alert("Unauthorized, Kindly Login to continue")
       console.error("Unauthorized! Redirecting to login...");
     }
     return Promise.reject(error);

@@ -6,6 +6,7 @@ import groceries from "/images/groceries.png"
 import Button from './Button'
 import StatLabel from './StatLabel'
 import Category from './Category'
+import { useNavigate } from 'react-router-dom'
 
 const heroSlides = [
     {
@@ -30,6 +31,8 @@ const heroSlides = [
 
 const HeroSection = () => {
 
+    const navigate = useNavigate()
+
     const [current, setCurrent] = useState(0);
     useEffect(() => {
         const interval = setInterval(()=> {
@@ -48,8 +51,8 @@ const HeroSection = () => {
                         groceries, home essentials, beauty, and much more.
                     </p>
                     <div className='flex space-x-5'>
-                        <Button colors={"bg-primary text-secondary hover:bg-primary/80 border-primary"} >Shop Now</Button>
-                        <Button className={"px-5"} >Explore Products</Button>
+                        <Button onClick={() => navigate("/feeds")} colors={"bg-primary text-secondary hover:bg-primary/80 border-primary"} >Shop Now</Button>
+                        <Button onClick={() => navigate("/feeds")} className={"px-5"} >Explore Products</Button>
                     </div>
 
                     <div className='flex flex-col mt-2 space-y-2 items-center md:flex-row md:justify-between w-[90%] xl:w-[70%]'>
