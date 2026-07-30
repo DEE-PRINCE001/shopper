@@ -2,13 +2,13 @@ import { Bell, Search } from "lucide-react";
 
 const Header = ({ title }) => {
     return (
-        <header className="flex items-center justify-between border-b border-secondary bg-white px-8 py-5">
+        <header className="flex items-center justify-between border-b border-secondary bg-primary px-8 py-5">
             <div>
-                <h2 className="text-2xl font-semibold">
+                <h2 className="text-2xl text-white font-semibold">
                     {title}
                 </h2>
 
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-secondary">
                     Welcome back, Admin
                 </p>
             </div>
@@ -38,16 +38,16 @@ const Header = ({ title }) => {
                 {/* Profile */}
 
                 <div className="flex items-center gap-3">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-full bg-primary font-semibold text-white">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-full bg-secondary font-semibold text-primary">
                         A
                     </div>
 
                     <div className="hidden sm:block">
-                        <p className="font-medium">
+                        <p className="font-medium text-white">
                             Admin
                         </p>
 
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-secondary">
                             Administrator
                         </p>
                     </div>

@@ -13,7 +13,7 @@ const AdminLayout = () => {
     const { pathname } = useLocation();
 
     return (
-        <div className="flex h-screen bg-secondary">
+        <div className="flex h-screen bg-gray-300">
             <Sidebar />
 
             <main className="flex flex-1 flex-col overflow-hidden">

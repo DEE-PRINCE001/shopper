@@ -41,16 +41,16 @@ const Sidebar = () => {
     }
 
     return (
-        <aside className="flex h-screen w-64 flex-col border-r border-secondary bg-white">
+        <aside className="flex h-screen w-64 flex-col border-r border-secondary bg-primary">
             {/* Logo */}
 
-            <div className="border-b border-secondary p-6">
-                <h1 className="text-2xl font-bold">
+            <div className="border-b border-secondary p-5">
+                <h2 className="text-2xl text-white font-bold">
                     Admin
-                </h1>
+                </h2>
 
-                <p className="text-sm text-gray-500">
-                    Clothing Store
+                <p className="text-sm text-secondary">
+                    Shopper
                 </p>
             </div>
 
@@ -68,8 +68,8 @@ const Sidebar = () => {
                             className={({ isActive }) =>
                                 `flex items-center gap-3 rounded-lg px-4 py-3 transition ${
                                     isActive
-                                        ? "bg-primary text-white"
-                                        : "hover:bg-secondary"
+                                        ? "bg-secondary text-primary"
+                                        : "hover:bg-secondary/30 text-white"
                                 }`
                             }
                         >
@@ -84,7 +84,7 @@ const Sidebar = () => {
             {/* Logout */}
 
             <div className="border-t border-secondary p-4">
-                <button onClick={handleLogout} className="flex w-full items-center gap-3 rounded-lg px-4 py-3 transition hover:bg-secondary">
+                <button onClick={handleLogout} className="flex text-white w-full items-center gap-3 rounded-lg px-4 py-3 transition hover:bg-secondary">
                     <LogOut size={20} />
 
                     Logout
