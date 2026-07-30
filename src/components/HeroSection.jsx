@@ -51,7 +51,7 @@ const HeroSection = () => {
                         groceries, home essentials, beauty, and much more.
                     </p>
                     <div className='flex space-x-5'>
-                        <Button onClick={() => navigate("/feeds")} colors={"bg-primary text-secondary hover:bg-primary/80 border-primary"} >Shop Now</Button>
+                        <Button onClick={() => navigate("/auth/register")} colors={"bg-primary text-secondary hover:bg-primary/80 border-primary"} >Sign Up</Button>
                         <Button onClick={() => navigate("/feeds")} className={"px-5"} >Explore Products</Button>
                     </div>
 
