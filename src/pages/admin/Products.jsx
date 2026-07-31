@@ -50,6 +50,9 @@ const Products = () => {
     const [page, setPage] = useState(1);
     const [products, setProducts] = useState([]);
     const [response, setResponse] = useState([])
+    const [edit, setEdit] = useState(null)
+    const [deleteLoading, setDeleteLoading] = useState(false)
+    const [reloadPage, setReloadPage] = useState(false);
 
     const [openModal, setOpenModal] = useState(false);
 
@@ -88,8 +91,24 @@ const Products = () => {
         }
 
         fetchProductsAndCategories()
-    }, [])
+    }, [reloadPage])
 
+    const handleDelete = async (id) => {
+        try {
+                setDeleteLoading(true)
+                console.log(id)
+                const response = await adminCatalogApi.deleteProduct(id);
+                console.log(response)
+                setReloadPage((prev) => !prev)
+                alert("Delete Successful");
+            }
+            catch (err) {
+                console.log(err)
+            }
+            finally {
+                setDeleteLoading(false)
+            }
+    }
 
 
 
@@ -181,12 +200,14 @@ const Products = () => {
             >
                 {filteredProducts.map((product) => (
                     <ProductRow
+                    loading={deleteLoading}
                         key={product.id}
                         product={product}
-                        onEdit={() =>
-                            setOpenModal(true)
+                        onEdit={() =>{ 
+                            setEdit(product)
+                            setOpenModal(true)}
                         }
-                        onDelete={() => { }}
+                        onDelete={() => handleDelete(product.id)}
                     />
                 ))}
             </DataTable>
@@ -207,8 +228,11 @@ const Products = () => {
             <ProductModal
                 options={options}
                 open={openModal}
-                onClose={() =>
+                edit={edit}
+                onClose={() =>{ 
                     setOpenModal(false)
+                    setReloadPage((prev) => !prev)
+                    setEdit(null)}
                 }
             />
         </div>

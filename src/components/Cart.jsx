@@ -60,7 +60,7 @@ const Cart = ({ data, rating = 4, name = "Gradient Graphic-T-Shirt", price = 400
       </div>
 
       <div className='flex flex-col justify-between items-end'>
-        <div className='rounded-full p-2 h-fit w-fit flex justify-between items-center hover:bg-secondary cursor-pointer'>
+        <div onClick={setQuantity(0)} className='rounded-full p-2 h-fit w-fit flex justify-between items-center hover:bg-secondary cursor-pointer'>
           <Trash2 size={20} className='text-red-500' />
         </div>
         <div className={"flex flex-col space-y-2 items-end"}>
@@ -69,7 +69,7 @@ const Cart = ({ data, rating = 4, name = "Gradient Graphic-T-Shirt", price = 400
             <div className={`${loading ? "animate:pulse" : ""}`}>{loading ? <Circle /> : quantity}</div>
             <button onClick={() => setQuantity((prev) => prev + 1)} className='cursor-pointer'><Plus size={20} /></button>
           </div>
-          <div className={"text-gray-500"}>${data.totalPrice}</div>
+          <div className={`${loading? "animate:pulse": "text-gray-500"}`}>${loading ? <Circle size={10} /> : (data.price * quantity)}</div>
         </div>
       </div>
 

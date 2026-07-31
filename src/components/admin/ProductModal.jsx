@@ -8,49 +8,44 @@ import Select from "../ui/Select";
 
 
 
-
 {/* name, description, price, stockQuantity, categoryId, imageUrl */ }
 
 const ProductModal = ({
+    edit,
     options,
     open,
     onClose,
 }) => {
 
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
 
 
     const [formData, setFormdata] = useState({
+        "id": "",
         "name": "",
         "description": "",
         "price": "",
         "stockQuantity": "",
         "categoryId": "",
         "imageUrl": ""
-    })
-    let categories = []
+    });
 
 
-    const handleChange = (e) => {
-        e.preventDefault();
-        setFormdata({ ...formData, [e.target.name]: e.target.value })
-    }
+    useEffect(() => {
 
-    const handleSave = async (e) => {
-        e.preventDefault();
-        
-        if (formData.categoryId.length < 2){
-            alert("Kindly choose a category, the Category section cannot be empty")
-            return;
-        }
-        
-        try {
-            setLoading(true);
-            console.log(formData)
-            const response = await adminCatalogApi.createProduct(formData);
-            console.log(response)
-
+        if (edit) {
             setFormdata({
+                "id": edit.id ?? "",
+                "name": edit.name ?? "",
+                "description": edit.description ?? "",
+                "price": edit.price ?? "",
+                "stockQuantity": edit.stockQuantity ?? "",
+                "categoryId": edit.categoryId ?? "",
+                "imageUrl": ""
+            });
+        } else {
+            setFormdata({
+                "id": "",
                 "name": "",
                 "description": "",
                 "price": "",
@@ -58,29 +53,99 @@ const ProductModal = ({
                 "categoryId": "",
                 "imageUrl": ""
             });
-            onClose()
+        }
 
-            alert("Product Added successfully")
+    }, [edit]);
+
+
+    const handleChange = (e) => {
+        e.preventDefault();
+
+        const { name, value } = e.target;
+
+        // Image upload has not been implemented yet,
+        // so imageUrl should always remain an empty string.
+        if (name === "imageUrl") {
+            setFormdata(prev => ({
+                ...prev,
+                imageUrl: ""
+            }));
+
+            return;
+        }
+
+        setFormdata(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+
+    const handleSave = async (e) => {
+        e.preventDefault();
+
+        if (formData.categoryId.length < 2) {
+            alert("Kindly choose a category, the Category section cannot be empty");
+            return;
+        }
+
+        try {
+            setLoading(true);
+
+            const response = edit
+                ? await adminCatalogApi.updateProduct(formData)
+                : await adminCatalogApi.createProduct(
+                    Object.fromEntries(
+                        Object.entries(formData).slice(1)
+                    )
+                );
+
+            console.log(response);
+
+            setFormdata({
+                "id": "",
+                "name": "",
+                "description": "",
+                "price": "",
+                "stockQuantity": "",
+                "categoryId": "",
+                "imageUrl": ""
+            });
+
+            onClose();
+
+            alert(
+                edit
+                    ? "Product Updated Successfully"
+                    : "Product Added successfully"
+            );
 
         }
         catch (err) {
-            console.log(err)
-            alert("Failed to add product")
+            console.log(err);
+
+            alert(
+                edit
+                    ? "Failed to Update Product"
+                    : "Failed to add product"
+            );
         }
         finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }
+    };
+
 
     return (
         <Modal
             open={open}
             onClose={onClose}
-            title="Add Product"
+            title={edit ? "Edit Product" : "Add Product"}
         >
             <div className="space-y-5">
 
-                <Input name={"name"}
+                <Input
+                    name={"name"}
                     value={formData.name}
                     onChange={handleChange}
                     label="Product Name"
@@ -88,17 +153,11 @@ const ProductModal = ({
 
                 <Select
                     name={"categoryId"}
-                    value={formData.category}
+                    value={formData.categoryId}
                     onChange={handleChange}
                     label={"Category"}
-                    options={[{"label":"", "value":""}, ...options]}
+                    options={[{ "label": "", "value": "" }, ...options]}
                 />
-                {/* <Input
-                    name={category}
-                    value={formData.category}
-                    onChange={handleChange}
-                    label="Category"
-                /> */}
 
                 <Input
                     name={"price"}
@@ -128,7 +187,6 @@ const ProductModal = ({
                 <Input
                     type="file"
                     name={"imageUrl"}
-                    value={formData.imageUrl}
                     onChange={handleChange}
                     label="Product Image"
                 />
@@ -142,7 +200,10 @@ const ProductModal = ({
                         Cancel
                     </Button>
 
-                    <Button onClick={handleSave} disabled={loading}>
+                    <Button
+                        onClick={handleSave}
+                        disabled={loading}
+                    >
                         {loading ? "Saving..." : "Save Product"}
                     </Button>
 

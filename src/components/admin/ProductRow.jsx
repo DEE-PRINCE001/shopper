@@ -2,6 +2,7 @@ import ActionButtons from "./ActionButtons";
 import StatusBadge from "./StatusBadge";
 
 const ProductRow = ({
+    loading,
     product,
     onEdit,
     onDelete,
@@ -40,6 +41,7 @@ const ProductRow = ({
 
             <td className="px-6 py-4">
                 <ActionButtons
+                    loading={loading}
                     onEdit={() => onEdit(product)}
                     onDelete={() => onDelete(product)}
                 />

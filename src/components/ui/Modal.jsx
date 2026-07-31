@@ -8,6 +8,8 @@ const Modal = ({
 }) => {
     if (!open) return null;
 
+   
+
     return (
         <div className="fixed h-screen inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
             <div className="w-full h-[90%] scrollbar-none overflow-y-auto max-w-lg rounded-xl bg-white shadow-lg">

@@ -1,6 +1,7 @@
-import { Eye, Pencil, Trash2 } from "lucide-react";
+import { Circle, Eye, Pencil, Trash2 } from "lucide-react";
 
 const ActionButtons = ({
+    loading,
     onView,
     onEdit,
     onDelete,
@@ -30,7 +31,7 @@ const ActionButtons = ({
                     onClick={onDelete}
                     className="rounded-lg p-2 text-red-600 transition hover:bg-red-50"
                 >
-                    <Trash2 size={18} />
+                    {loading? <Circle className="animate-pulse" /> : <Trash2 size={18} />}
                 </button>
             )}
         </div>
