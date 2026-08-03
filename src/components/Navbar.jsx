@@ -7,7 +7,7 @@ import { FaCartPlus, FaBars } from 'react-icons/fa'
 
 const Navbar = () => {
     return (
-        <div className='p-5 md:px-10 xl:px-15 flex items-center justify-between space-x-8 w-full'>
+        <div className='p-5 md:px-10 xl:px-15 flex items-center justify-between space-x-8 w-full sticky top-0 left-0 right-0 backdrop-blur-2xl z-50'>
             <div className='flex space-x-5 items-center'>
                 <div className='md:hidden'>
                     <FaBars />
