@@ -39,7 +39,7 @@ const Product = ({ img, name = "Skinny Fit Jeans", rating = 0, price=260, discou
       const ratings = (Math.random() * 5).toFixed(1);
     return (
         <div className='flex flex-col space-y-4'>
-            <div className='rounded-2xl flex items-center justify-center overflow-hidden bg-secondary p-3 w-full aspect-square'> <img src={img} alt={name.slice(0, 7)} className='object-cover hover:scale-105 transition duration-300'/></div>
+            <div className='rounded-2xl flex items-center justify-center overflow-hidden bg-secondary p-3 w-full aspect-square'> <img src={data.imageUrl} loading='lazy' alt={name.slice(0, 7)} className='object-cover hover:scale-105 transition duration-300'/></div>
             <div className='flex flex-col font-sans space-y-1 mb-2'>
                 <h2 className='text-primary font-bold text-lg leading-none'>{data.name}</h2>
                 <div className='flex space-x-2'>

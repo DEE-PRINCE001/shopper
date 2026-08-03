@@ -1,14 +1,14 @@
+
 import Modal from "../ui/Modal";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
 import { useEffect, useState } from "react";
-import { adminCatalogApi, catalogApi } from "../../api";
-import LoadingState from "../ui/LoadingState";
+import { adminCatalogApi } from "../../api";
 import Select from "../ui/Select";
 
 
 
-{/* name, description, price, stockQuantity, categoryId, imageUrl */ }
+{/* name, description, price, stockQuantity, categoryId, imageUrl */}
 
 const ProductModal = ({
     edit,
@@ -19,6 +19,7 @@ const ProductModal = ({
 
     const [loading, setLoading] = useState(false);
 
+    const [selectedImage, setSelectedImage] = useState(null);
 
     const [formData, setFormdata] = useState({
         "id": "",
@@ -41,8 +42,11 @@ const ProductModal = ({
                 "price": edit.price ?? "",
                 "stockQuantity": edit.stockQuantity ?? "",
                 "categoryId": edit.categoryId ?? "",
-                "imageUrl": ""
+                "imageUrl": edit.imageUrl ?? ""
             });
+
+            setSelectedImage(null);
+
         } else {
             setFormdata({
                 "id": "",
@@ -53,6 +57,8 @@ const ProductModal = ({
                 "categoryId": "",
                 "imageUrl": ""
             });
+
+            setSelectedImage(null);
         }
 
     }, [edit]);
@@ -61,16 +67,10 @@ const ProductModal = ({
     const handleChange = (e) => {
         e.preventDefault();
 
-        const { name, value } = e.target;
+        const { name, value, files } = e.target;
 
-        // Image upload has not been implemented yet,
-        // so imageUrl should always remain an empty string.
         if (name === "imageUrl") {
-            setFormdata(prev => ({
-                ...prev,
-                imageUrl: ""
-            }));
-
+            setSelectedImage(files?.[0] ?? null);
             return;
         }
 
@@ -78,6 +78,38 @@ const ProductModal = ({
             ...prev,
             [name]: value
         }));
+    };
+
+
+    const uploadImage = async () => {
+
+        if (!selectedImage) {
+            return formData.imageUrl;
+        }
+
+        const cloudinaryFormData = new FormData();
+
+        cloudinaryFormData.append("file", selectedImage);
+        cloudinaryFormData.append(
+            "upload_preset",
+            "shopper_products"
+        );
+
+        const response = await fetch(
+            "https://api.cloudinary.com/v1_1/ax0sfpfo/image/upload",
+            {
+                method: "POST",
+                body: cloudinaryFormData
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error("Failed to upload image");
+        }
+
+        const data = await response.json();
+
+        return data.secure_url;
     };
 
 
@@ -92,11 +124,18 @@ const ProductModal = ({
         try {
             setLoading(true);
 
+            const imageUrl = await uploadImage();
+
+            const productData = {
+                ...formData,
+                imageUrl: imageUrl
+            };
+
             const response = edit
-                ? await adminCatalogApi.updateProduct(formData)
+                ? await adminCatalogApi.updateProduct(productData)
                 : await adminCatalogApi.createProduct(
                     Object.fromEntries(
-                        Object.entries(formData).slice(1)
+                        Object.entries(productData).slice(1)
                     )
                 );
 
@@ -111,6 +150,8 @@ const ProductModal = ({
                 "categoryId": "",
                 "imageUrl": ""
             });
+
+            setSelectedImage(null);
 
             onClose();
 

@@ -136,11 +136,11 @@ const Products = () => {
     }, [products, search, category, status]);
 
 
-    if (loading) {
-        return (
-            <LoadingState />
-        )
-    }
+    // if (loading) {
+    //     return (
+    //         <LoadingState />
+    //     )
+    // }
 
     return (
         <div className="space-y-6">
