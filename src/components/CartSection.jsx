@@ -59,15 +59,44 @@ const CartSection = () => {
     fetchCart();
   }, [refresh, cartId]);
 
+  const handleClearCart = async () => {
+    if (!cartId) return;
+    try {
+      setLoading(true);
+      await cartApi.deleteCart(cartId);
+      toast.success('Cart cleared successfully.');
+      setCart([]);
+      setCartSummary(null);
+      setRefresh((prev) => !prev);
+    } catch (err) {
+      console.error('Failed to clear cart:', err);
+      toast.error('Failed to clear cart. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className='flex flex-col space-y-3 flex-1 mx-5 md:mx-10 xl:mx-15'>
-      <h2 className='text-primary text-2xl font-extrabold font-archivo'>
-        Your Cart
-      </h2>
+    <div className='flex flex-col space-y-3 flex-1 mx-5 md:mx-10 xl:mx-15 py-6'>
+      <div className='flex justify-between items-center'>
+        <h2 className='text-primary text-2xl font-extrabold font-archivo'>
+          Your Cart
+        </h2>
+
+        {cart && cart.length > 0 && (
+          <button
+            onClick={handleClearCart}
+            disabled={loading}
+            className='text-xs text-red-500 hover:text-red-700 font-medium px-3 py-1.5 rounded-full border border-red-200 hover:bg-red-50 transition cursor-pointer disabled:opacity-50'
+          >
+            Clear Cart
+          </button>
+        )}
+      </div>
 
       <div className='flex flex-col md:flex-row space-y-5 md:space-y-0 md:space-x-5'>
         <div className='flex-1 flex flex-col px-5 py-0 border border-secondary rounded-2xl'>
-          {cart.length > 0 ? (
+          {cart && cart.length > 0 ? (
             cart.map((item) => (
               <Cart
                 setRefresh={setRefresh}
@@ -83,7 +112,7 @@ const CartSection = () => {
           ) : null}
         </div>
 
-        {cartSummary && (
+        {cartSummary && cart.length > 0 && (
           <OrderSummary
             loading={loading}
             data={cartSummary}

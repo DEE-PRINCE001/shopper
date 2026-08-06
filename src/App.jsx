@@ -15,8 +15,12 @@ import ResetLinkSent from './pages/auth/ResetLinkSent'
 import CDashboard from './pages/customers/CDashboard'
 import CustomerLayout from './layouts/CustomerLayout'
 import CartPage from './pages/customers/CartPage'
+import CheckoutPage from './pages/customers/CheckoutPage'
+import OrderHistoryPage from './pages/customers/OrderHistoryPage'
+import ProductDetailsPage from './pages/customers/ProductDetailsPage'
 import Feed from './pages/customers/Feed'
 import NewArrivals from './pages/customers/NewArrivals'
+import Contact from './pages/customers/Contact'
 import { Toaster } from 'react-hot-toast'
 
 
@@ -101,9 +105,12 @@ const App = () => {
         <Route path="/" element={<CustomerLayout />}>
           <Route index element={<CDashboard />} />
           <Route path='cart' element={<CartPage />} />
+          <Route path='checkout' element={<CheckoutPage />} />
+          <Route path='orders' element={<OrderHistoryPage />} />
+          <Route path='products/:id' element={<ProductDetailsPage />} />
           <Route path='feeds' element={<Feed />} />
           <Route path='new-arrivals' element={<NewArrivals />} />
-          <Route path='contact' />
+          <Route path='contact' element={<Contact />} />
         </Route>
       </Routes>
     </div>

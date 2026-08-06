@@ -1,99 +1,66 @@
-const orders = [
-    {
-        id: "#1001",
-        customer: "John Doe",
-        total: "$120",
-        status: "Pending",
-    },
-    {
-        id: "#1002",
-        customer: "Jane Smith",
-        total: "$85",
-        status: "Delivered",
-    },
-    {
-        id: "#1003",
-        customer: "Michael",
-        total: "$245",
-        status: "Processing",
-    },
-];
+import StatusBadge from "./StatusBadge";
 
-const getStatusColor = (status) => {
-    switch (status) {
-        case "Delivered":
-            return "bg-green-100 text-green-700";
-
-        case "Pending":
-            return "bg-yellow-100 text-yellow-700";
-
-        case "Processing":
-            return "bg-blue-100 text-blue-700";
-
-        default:
-            return "bg-gray-100 text-gray-700";
-    }
-};
-
-const RecentOrdersTable = () => {
+const RecentOrdersTable = ({ orders = [] }) => {
     return (
         <div className="rounded-xl border border-secondary bg-white">
-            <div className="border-b border-secondary p-5">
-                <h2 className="text-lg font-semibold">
+            <div className="border-b border-secondary p-5 flex justify-between items-center">
+                <h2 className="text-lg font-semibold text-primary">
                     Recent Orders
                 </h2>
+                <span className="text-xs text-gray-500">{orders.length} order(s)</span>
             </div>
 
             <table className="w-full">
                 <thead>
-                    <tr className="border-b border-secondary text-left">
-                        <th className="p-4 font-medium">
-                            Order
-                        </th>
-
-                        <th className="p-4 font-medium">
-                            Customer
-                        </th>
-
-                        <th className="p-4 font-medium">
-                            Total
-                        </th>
-
-                        <th className="p-4 font-medium">
-                            Status
-                        </th>
+                    <tr className="border-b border-secondary text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                        <th className="p-4">Order</th>
+                        <th className="p-4">Customer</th>
+                        <th className="p-4">Total</th>
+                        <th className="p-4">Status</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    {orders.map((order) => (
-                        <tr
-                            key={order.id}
-                            className="border-b border-secondary last:border-none"
-                        >
-                            <td className="p-4">
-                                {order.id}
-                            </td>
+                    {orders && orders.length > 0 ? (
+                        orders.slice(0, 5).map((order, idx) => {
+                            const orderId = order.id || order.orderId || `ORD-${idx + 1}`;
+                            const customerName = order.customer || order.customerName || order.userEmail || "Customer";
+                            const totalAmount = typeof order.total === "number"
+                                ? order.total.toFixed(2)
+                                : typeof order.totalAmount === "number"
+                                ? order.totalAmount.toFixed(2)
+                                : order.total || order.totalAmount || "0.00";
 
-                            <td className="p-4">
-                                {order.customer}
-                            </td>
-
-                            <td className="p-4">
-                                {order.total}
-                            </td>
-
-                            <td className="p-4">
-                                <span
-                                    className={`rounded-full px-3 py-1 text-sm ${getStatusColor(
-                                        order.status
-                                    )}`}
+                            return (
+                                <tr
+                                    key={orderId}
+                                    className="border-b border-secondary last:border-none hover:bg-gray-50/50 text-sm"
                                 >
-                                    {order.status}
-                                </span>
+                                    <td className="p-4 font-medium text-primary">
+                                        #{orderId}
+                                    </td>
+
+                                    <td className="p-4 text-gray-700">
+                                        {customerName}
+                                    </td>
+
+                                    <td className="p-4 font-semibold text-primary">
+                                        ${totalAmount}
+                                    </td>
+
+                                    <td className="p-4">
+                                        <StatusBadge status={order.status} />
+                                    </td>
+                                </tr>
+                            );
+                        })
+                    ) : (
+                        <tr>
+                            <td colSpan={4} className="p-6 text-center text-gray-400 text-sm">
+                                No recent orders to display.
                             </td>
                         </tr>
-                    ))}
+                    )}
                 </tbody>
             </table>
         </div>
