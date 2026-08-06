@@ -5,12 +5,17 @@ import OrderSummary from './OrderSummary';
 import furnitures from '/images/furniture.png';
 import { cartApi } from '../api';
 import { jwtDecode } from 'jwt-decode';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+
 
 const CartSection = () => {
   const [loading, setLoading] = useState(false);
   const [cart, setCart] = useState([]);
   const [cartSummary, setCartSummary] = useState(null);
   const [refresh, setRefresh] = useState(false);
+  
+  const navigate = useNavigate();
 
   const token = localStorage.getItem('accessToken');
 
@@ -21,7 +26,10 @@ const CartSection = () => {
       cartId = jwtDecode(token).nameid;
     }
   } catch (err) {
-    console.error('Invalid access token:', err);
+    toast.error('Invalid access token. Please log in again.');
+    setTimeout(() => {
+      navigate("/auth/login")
+    }, 1000);
   }
 
   useEffect(() => {
@@ -39,10 +47,10 @@ const CartSection = () => {
         setCart(response.items);
         setCartSummary(response);
 
-        console.log('cart', response);
+        console.log('cart products', response);
       } catch (err) {
         console.error('Failed to fetch cart:', err);
-        alert('Failed to load cart. Please try again.');
+        toast.error('Failed to load cart. Please try again.');
       } finally {
         setLoading(false);
       }

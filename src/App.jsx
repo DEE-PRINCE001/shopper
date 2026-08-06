@@ -17,11 +17,39 @@ import CustomerLayout from './layouts/CustomerLayout'
 import CartPage from './pages/customers/CartPage'
 import Feed from './pages/customers/Feed'
 import NewArrivals from './pages/customers/NewArrivals'
+import { Toaster } from 'react-hot-toast'
 
 
 const App = () => {
   return (
     <div className='font-inter'>
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+        toastOptions={{
+          duration: 3500,
+          style: {
+            background: '#333',
+            color: '#fff',
+            fontSize: '14px',
+            borderRadius: '8px',
+          },
+          success: {
+            duration: 3000,
+            iconTheme: {
+              primary: '#10B981',
+              secondary: '#fff',
+            },
+          },
+          error: {
+            duration: 4000,
+            iconTheme: {
+              primary: '#EF4444',
+              secondary: '#fff',
+            },
+          },
+        }}
+      />
       <Routes>
 
 

@@ -17,7 +17,7 @@ const ProductSection = ({ name = "New Arrivals", data, border }) => {
       try {
         setLoading(true)
         const response = await catalogApi.getProducts();
-        console.log(response)
+        console.log(response.items)
         setProducts(response.items)
 
       }

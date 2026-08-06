@@ -7,7 +7,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-*/admin
+TODO.md
 */ui
 
 node_modules

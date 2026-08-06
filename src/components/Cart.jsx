@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Ratings from './Ratings';
 import { jwtDecode } from 'jwt-decode';
 import { cartApi } from '../api';
+import toast from 'react-hot-toast';
 
 const Cart = ({
   data,
@@ -52,26 +53,22 @@ const Cart = ({
 
       try {
         setLoading(true);
+               
 
-        await cartApi.updateCartItem({
-          cartId,
-          productId: data.productId,
-          quantity: newQuantity,
-        });
+        await cartApi.updateCartItem({"cartId":cartId, "productId": data.productId, "quantity": newQuantity});
 
         lastSuccessfulQuantity.current = newQuantity;
 
         // Refresh the parent summary after successful update
         setRefresh((prev) => !prev);
 
-      } catch (err) {
-        console.error('Failed to update cart item:', err);
-
+      } catch (err) {        
         if (quantity === newQuantity) {
           setQuantity(previousQuantity);
         }
+        toast.error('Failed to update cart item.');
 
-        alert('Failed to update cart. Please try again.');
+        
       } finally {
         setLoading(false);
       }
@@ -88,7 +85,7 @@ const Cart = ({
     if (loading) return;
 
     if (quantity <= 1) {
-      alert('Cart cannot be less than 1');
+      toast.error('Cart cannot be less than 1');
       return;
     }
 

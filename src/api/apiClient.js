@@ -1,4 +1,5 @@
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const apiClient = axios.create({
   baseURL: 'https://shopper-k30n.onrender.com',
@@ -73,18 +74,13 @@ apiClient.interceptors.response.use(
         const refreshToken = localStorage.getItem('refreshToken');
 
         if (!refreshToken) {
-          alert("No refresh token")
+          toast.error('No refresh token available. Please log in again.');
           throw new Error('No refresh token available');
         }
 
         // Call your backend refresh endpoint
         // NOTE: Replace '/auth/refresh' with your actual refresh route
-        console.log("sent the refresh request")
-        console.log("sent the refresh request")
-        console.log("sent the refresh request")
-        console.log("sent the refresh request")
-        console.log("sent the refresh request")
-        console.log("sent the refresh request")
+      
         const response = await axios.post(
           'https://shopper-k30n.onrender.com/auth/refresh',
           { "refreshToken": refreshToken },
@@ -126,8 +122,12 @@ apiClient.interceptors.response.use(
 function handleLogout() {
   localStorage.removeItem('accessToken');
   localStorage.removeItem('refreshToken');
-  alert("Session expired. Kindly login to continue.");
-  window.location.replace('/auth/login');
+
+  toast.error('Session expired. Please log in again.');
+
+  setTimeout(() => {
+    window.location.replace('/auth/login');
+  }, 1500);
 }
 
 export default apiClient;
