@@ -1,43 +1,57 @@
+import { useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Lock } from "lucide-react";
+import toast from "react-hot-toast";
 
 import Button from "../../components/ui/Button";
 import Input from "../../components/ui/Input";
 import AuthHeader from "../../components/auth/AuthHeader";
-import { authApi } from '../../api'
-import { useState } from 'react'
+import { authApi } from '../../api';
 
 const ResetPassword = () => {
+    const [searchParams] = useSearchParams();
+    const tokenParam = searchParams.get('token') || '';
 
     const [formData, setFormData] = useState({ password: "" });
     const [passwordConfirm, setPasswordConfirm] = useState("");
-    const [error, setError] = useState("")
-
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setError("");
         setFormData({ ...formData, [e.target.name]: e.target.value });
-    }
+    };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('')
-        if (passwordConfirm != formData.password){
-            setError("The entered password are different")
-            console.log(error)
+        if (passwordConfirm !== formData.password) {
+            const errMsg = "The entered passwords do not match.";
+            setError(errMsg);
+            toast.error(errMsg);
             return;
         }
+
+        setLoading(true);
+        setError('');
         try {
-
-            console.log(formData)
-            authApi.resetPassword(formData)
+            await authApi.resetPassword({
+                token: tokenParam,
+                newPassword: formData.password,
+            });
+            toast.success("Password reset successfully! Please login with your new password.");
+            setTimeout(() => {
+                navigate("/auth/login");
+            }, 1200);
+        } catch (err) {
+            console.error("Reset password error:", err);
+            const errMsg = err.response?.data?.message || err.message || "Failed to reset password. Please request a new link.";
+            setError(errMsg);
+            toast.error(errMsg);
+        } finally {
+            setLoading(false);
         }
-        catch (err) {
-            setError(err);
-            console.log(error);
-            alert(error)
-        }
-    }
-
+    };
 
     return (
         <>
@@ -45,6 +59,12 @@ const ResetPassword = () => {
                 title="Reset Password"
                 subtitle="Choose a new password for your account."
             />
+
+            {error && (
+                <div className="bg-red-50 text-red-600 border border-red-200 text-xs p-3 rounded-xl mb-4 text-center">
+                    {error}
+                </div>
+            )}
 
             <form onSubmit={handleSubmit} className="space-y-5">
                 <Input
@@ -54,6 +74,7 @@ const ResetPassword = () => {
                     name={"password"}
                     value={formData.password}
                     onChange={handleChange}
+                    required
                 />
 
                 <Input
@@ -61,15 +82,16 @@ const ResetPassword = () => {
                     name="passwordConfirm"
                     value={passwordConfirm}
                     onChange={(e) => {
-                        setError("")
-                        setPasswordConfirm(e.target.value)
+                        setError("");
+                        setPasswordConfirm(e.target.value);
                     }}
                     type="password"
                     leftIcon={Lock}
+                    required
                 />
 
-                <Button type="submit" className="w-full">
-                    Reset Password
+                <Button type="submit" disabled={loading} className="w-full">
+                    {loading ? "Resetting..." : "Reset Password"}
                 </Button>
             </form>
         </>

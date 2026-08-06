@@ -1,8 +1,10 @@
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
+const API_BASE_URL = 'https://shopper-k30n.onrender.com';
+
 const apiClient = axios.create({
-  baseURL: 'https://shopper-k30n.onrender.com',
+  baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -45,9 +47,9 @@ apiClient.interceptors.response.use(
     const originalRequest = error.config;
 
     // Check if error is 401 and we haven't already retried this request
-    if (error.response && error.response.status === 401 && !originalRequest._retry) {
+    if (error.response && error.response.status === 401 && originalRequest && !originalRequest._retry) {
       // Avoid intercepting the refresh endpoint itself if it fails with 401
-      if (originalRequest.url.includes('/auth/refresh')) {
+      if (originalRequest.url && originalRequest.url.toLowerCase().includes('/api/auth/refresh-token')) {
         handleLogout();
         return Promise.reject(error);
       }
@@ -70,42 +72,42 @@ apiClient.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        // Retrieve the refresh token (adjust key if yours is named differently)
+        const accessToken = localStorage.getItem('accessToken');
         const refreshToken = localStorage.getItem('refreshToken');
 
         if (!refreshToken) {
-          toast.error('No refresh token available. Please log in again.');
-          throw new Error('No refresh token available');
+          handleLogout();
+          return Promise.reject(new Error('No refresh token available'));
         }
 
-        // Call your backend refresh endpoint
-        // NOTE: Replace '/auth/refresh' with your actual refresh route
-      
+        // Call backend refresh endpoint
         const response = await axios.post(
-          'https://shopper-k30n.onrender.com/auth/refresh',
-          { "refreshToken": refreshToken },
+          `${API_BASE_URL}/api/Auth/refresh-token`,
+          {
+            accessToken: accessToken || '',
+            refreshToken: refreshToken,
+          },
           { headers: { 'Content-Type': 'application/json' } }
         );
 
-        // Extract new tokens (adjust property names based on your backend response)
-        const { accessToken, refreshToken: newRefreshToken } = response.data;
+        const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data || {};
 
-        localStorage.setItem('accessToken', accessToken);
+        if (!newAccessToken) {
+          throw new Error('Refresh failed - invalid response token');
+        }
+
+        localStorage.setItem('accessToken', newAccessToken);
         if (newRefreshToken) {
           localStorage.setItem('refreshToken', newRefreshToken);
         }
 
-        // Update default headers and the failed request header
-        apiClient.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+        apiClient.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
-        // Release queued requests with the new token
-        processQueue(null, accessToken);
+        processQueue(null, newAccessToken);
 
-        // Retry the original request
         return apiClient(originalRequest);
       } catch (refreshError) {
-        // Refresh token failed or expired -> reject queue and log out
         processQueue(refreshError, null);
         handleLogout();
         return Promise.reject(refreshError);
@@ -123,11 +125,12 @@ function handleLogout() {
   localStorage.removeItem('accessToken');
   localStorage.removeItem('refreshToken');
 
-  toast.error('Session expired. Please log in again.');
-
-  setTimeout(() => {
-    window.location.replace('/auth/login');
-  }, 1500);
+  if (window.location.pathname !== '/auth/login' && !window.location.pathname.startsWith('/auth/')) {
+    toast.error('Session expired. Please log in again.');
+    setTimeout(() => {
+      window.location.replace('/auth/login');
+    }, 1200);
+  }
 }
 
 export default apiClient;
